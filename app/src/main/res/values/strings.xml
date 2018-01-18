@@ -10,6 +10,7 @@
     <string name="clear_status">清空</string>
     <string name="stop_location">停止</string>
     <string name="settings">设置</string>
+    <string name="jump">跳转</string>
     <string name="my_location">我的位置</string>
     <string name="placeholder"></string>
     <string name="btn_my_loc">定位</string>
@@ -17,4 +18,19 @@
     <string name="btn_del">删除</string>
     <string name="btn_stop">停止测试</string>
     <string name="set_name">取个名字吧</string>
+    <string name="title_activity_tel">输入电话</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">邮箱</string>
+    <string name="prompt_telphone">手机号码</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">确认</string>
+    <string name="action_sign_in_short">保存</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">电话号码不能为空</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 </resources>

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -85,8 +86,6 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
         }
         setContentView(R.layout.activity_template);
         mLocationStatus = (TextView) findViewById(R.id.status);
-
-
         Button settings = ((Button) findViewById(R.id.settings));
         settings.setText("Level");
         settings.setVisibility(View.VISIBLE);
@@ -137,6 +136,11 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
 
     public void clearStatus(View view) {
         mLocationStatus.setText(null);
+    }
+
+    public void jump(View view) {
+        Intent intent = new Intent(MainActivity.this, TelActivity.class);
+        startActivity(intent);
     }
 
     public void settings(View view) {

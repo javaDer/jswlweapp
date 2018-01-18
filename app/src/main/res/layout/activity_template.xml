@@ -49,6 +49,14 @@
             android:onClick="settings"
             android:text="@string/settings"
             android:visibility="gone" />
+
+        <Button
+            android:id="@+id/jump"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="jump"
+            android:text="@string/jump" />
     </LinearLayout>
 
     <ScrollView
