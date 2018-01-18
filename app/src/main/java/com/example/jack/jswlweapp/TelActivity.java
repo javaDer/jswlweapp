@@ -23,10 +23,14 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
+
+import com.example.jack.jswlweapp.model.Info;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import xiaofei.library.datastorage.DataStorageFactory;
+import xiaofei.library.datastorage.IDataStorage;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -158,6 +162,20 @@ public class TelActivity extends AppCompatActivity implements LoaderCallbacks<Cu
             mAuthTask.execute((Void) null);
         }
         Log.i("email", email);
+        //存入数据中，非数据库
+        saveData(email);
+    }
+
+    public void saveData(String email) {
+        IDataStorage dataStorage = DataStorageFactory.getInstance(
+                getApplicationContext(),
+                DataStorageFactory.TYPE_DATABASE);
+        Info info = new Info();
+        info.setmId("1");
+        info.setMoblie(email);
+        dataStorage.storeOrUpdate(info);
+        Info info1 = dataStorage.load(Info.class, "1");
+        Log.i("info1", info1.toString());
     }
 
     /**

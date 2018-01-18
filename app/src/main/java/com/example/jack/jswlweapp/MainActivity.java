@@ -1,7 +1,6 @@
 package com.example.jack.jswlweapp;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,18 +8,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.jack.jswlweapp.Utils.DemoUtils;
-import com.example.jack.jswlweapp.Utils.HttpUtils;
+import com.example.jack.jswlweapp.model.Info;
 import com.google.gson.Gson;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
@@ -30,7 +25,6 @@ import com.tencent.map.geolocation.TencentPoi;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -41,8 +35,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static android.content.ContentValues.TAG;
+import xiaofei.library.datastorage.DataStorageFactory;
+import xiaofei.library.datastorage.IDataStorage;
 
 
 public class MainActivity extends Activity implements DialogInterface.OnClickListener,
@@ -62,6 +56,15 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
     private int mLevel = LEVELS[DEFAULT];
     private TencentLocationManager mLocationManager;
     private TextView mLocationStatus;
+
+    public Info getData() {
+        IDataStorage dataStorage = DataStorageFactory.getInstance(
+                getApplicationContext(),
+                DataStorageFactory.TYPE_DATABASE);
+        Info info1 = dataStorage.load(Info.class, "1");
+        Log.i("info1", info1.toString());
+        return info1;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
         // 设置坐标系为 gcj-02, 缺省坐标为 gcj-02, 所以通常不必进行如下调用
         mLocationManager.setCoordinateType(TencentLocationManager.COORDINATE_TYPE_GCJ02);
     }
+
 
     @Override
     protected void onDestroy() {
@@ -153,13 +157,15 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
 
     // ====== location callback
 
+
     @Override
     public void onLocationChanged(TencentLocation location, int error,
                                   String reason) {
+        Info info = getData();
         String msg = null;
         if (error == TencentLocation.ERROR_OK) {
             // 定位成功
-            msg = toString(location, mLevel);
+            msg = toString(location, mLevel, info);
         } else {
             // 定位失败
             msg = "定位失败: " + reason;
@@ -180,9 +186,8 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
     }
 
     // ===== util method
-    private static String toString(TencentLocation location, int level) {
+    private String toString(TencentLocation location, int level, Info info) {
         StringBuilder sb = new StringBuilder();
-
         sb.append("latitude=").append(location.getLatitude()).append(",");
         sb.append("longitude=").append(location.getLongitude()).append(",");
         sb.append("altitude=").append(location.getAltitude()).append(",");
@@ -215,6 +220,7 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
                 map.put("latitude", location.getLatitude());
                 map.put("longitude", location.getLongitude());
                 map.put("address", location.getAddress());
+                map.put("moblie", info.getMoblie());
                 String locationstr = gson.toJson(map);
                 OkHttpClient okHttpClient = new OkHttpClient();//1.定义一个client
                 RequestBody body = new FormBody.Builder()
